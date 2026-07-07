@@ -15,5 +15,5 @@ After that there will be a big window. On this window is green background symbol
 
 ***
 
-### Top 5 interesting things in the Source Code:
+### Top *X* interesting things in the Source Code:
 There is nothing to see in this section, because the code is in progress and in the code aren`t any interesting things yet.
