@@ -1,5 +1,5 @@
 # Flower Snatcher
-This repository includes Python code that s a game. The color circle appears in the middle of the window and you have to press the `space` key on your keyboard fastest as you can and win. This game is multiplayer and you can not play it single. This code is in progress and you can play it now, but you won't enjoy it because it isn't exciting yet.
+#### This repository includes Python code that s a game. The color circle appears in the middle of the window and you have to press the `space` key on your keyboard fastest as you can and win. This game is multiplayer and you can not play it single. This code is in progress and you can play it now, but you won't enjoy it because it isn't exciting yet.
 
 ***
 
