@@ -1,10 +1,8 @@
 # Flower Snatcher
 #### In this Python script you can see the color circle that appears in the middle of the window and you have to press the `space` key on your keyboard fastest as you can and win. This game is multiplayer and you can not play it single. This code is in progress and you can play it now, but you won't enjoy it because it isn't exciting yet.
 
-#### *Warning: This script is currently under development and will be available to use soon.*
-
+#### *Note: This script is currently under development and will be available to use soon.*
 ***
-
 ### GUI interface preview:
 
 When you start the code there will appears pop-up window using `askstring` command to ask you for a players nickname.
@@ -16,6 +14,5 @@ After that there will be a big window. On this window is green background symbol
 <img width="1470" height="874" alt="Picture 1" src="https://github.com/user-attachments/assets/a9de19af-969d-410b-af9f-8752868c2c9f" />
 
 ***
-
 ### Top *X* interesting things in the Source Code:
 There is nothing to see in this section, because the code is in progress and in the code aren`t any interesting things yet.
