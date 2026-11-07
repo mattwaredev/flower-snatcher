@@ -56,10 +56,9 @@ if audio_available:
     music_channel = pygame.mixer.Channel(0)
 running = True
 game_started = False
-difficulty_open = False
 language_open = False
-selected_players = "2 hráči"
 selected_language = "Čeština"
+player_keys = [pygame.K_a, pygame.K_l]
 player_scores = [0, 0, 0, 0, 0]
 next_flower_time = None
 game_over_message = None
@@ -70,22 +69,16 @@ colours = [
     (150, 70, 190), (245, 140, 30), (130, 80, 35), (150, 150, 150),
     (220, 220, 220), (235, 190, 30)
 ]
-player_key_sets = {
-    "2 hráči": [pygame.K_a, pygame.K_l],
-        "3 hráči": [pygame.K_a, pygame.K_g, pygame.K_l],
-        "4 hráči": [pygame.K_a, pygame.K_d, pygame.K_j, pygame.K_l],
-        "5 hráčů": [pygame.K_a, pygame.K_d, pygame.K_g, pygame.K_j, pygame.K_l]
-}
 translations = {
     "Čeština": {
-        "music": "Hudba", "sounds": "Zvuky", "players": "Hráči", "difficulty": "Obtížnost", "language": "Jazyk",
+        "music": "Hudba", "sounds": "Zvuky", "language": "Jazyk",
         "play": "Hrát", "exit": "Ukončit", "welcome": "Vítej!", "two_players": "Tato hra je pro 2 hráče.",
         "player_keys": "Hráč 1 používá klávesu A a hráč 2 klávesu L.", "point": "Hráč, který první chytí květinu, získá bod.",
         "escape": "Stisknutím klávesy Escape hru ukončíš.", "good_luck": "Hodně štěstí a dobře se bav!",
         "winner": "Hráč {player} vyhrál s {score} body!", "no_winner": "Hra skončila bez vítěze."
     },
     "Angličtina": {
-        "music": "Music", "sounds": "Sounds", "players": "Players", "difficulty": "Difficulty", "language": "Language",
+        "music": "Music", "sounds": "Sounds", "language": "Language",
         "play": "Play", "exit": "Exit", "welcome": "Welcome!", "two_players": "This game is for 2 players.",
         "player_keys": "Player 1 uses the A key and Player 2 uses the L key.", "point": "The first player to catch the flower gets a point.",
         "escape": "Press Escape to end the game.", "good_luck": "Good luck and have fun!",
@@ -131,9 +124,8 @@ def keep_flower_visible(event=None):
 
 
 def start_game(event=None):
-    global game_started, flower, flower_position, difficulty_open, language_open
+    global game_started, flower, flower_position, language_open
     game_started = True
-    difficulty_open = False
     language_open = False
     flower_position = (window.get_width() // 2, window.get_height() // 2)
     flower = flower_image
@@ -175,26 +167,14 @@ def stop_music():
         music_channel.stop()
 
 
-def toggle_difficulty(event=None):
-    global difficulty_open, language_open
-    difficulty_open = not difficulty_open
-    language_open = False
-
-
 def toggle_language(event=None):
-    global language_open, difficulty_open
+    global language_open
     language_open = not language_open
-    difficulty_open = False
 
 
 def select_language(language):
     global selected_language
     selected_language = language
-
-
-def select_difficulty(event=None, players=None):
-    global selected_players
-    selected_players = players
 
 
 def configure_player_keys():
@@ -250,7 +230,7 @@ def end(event=None, winner=None):
     global game_over_message, game_over_time
     if winner is None:
         winner = player_scores.index(max(player_scores)) + 1
-    active_players = len(player_key_sets[selected_players])
+    active_players = len(player_keys)
     if winner <= active_players:
         game_over_message = text("winner").format(player=winner, score=player_scores[winner - 1])
     else:
@@ -288,26 +268,26 @@ def menu_layout():
     center = window.get_width() // 2
     message_lines = menu_message_lines()
     top_y = 115 + len(message_lines) * 22 + 30
-    button_width = max(70, min(110, (window.get_width() - 56) // 5))
+    button_width = max(70, min(110, (window.get_width() - 56) // 3))
     button_gap = 8
-    total_width = button_width * 5 + button_gap * 4
+    total_width = button_width * 3 + button_gap * 2
     first_button_x = (window.get_width() - total_width) // 2
     top_buttons = [
         (pygame.Rect(first_button_x + index * (button_width + button_gap), top_y, button_width, 40), label)
-        for index, label in enumerate(["Hudba", "Zvuky", "Hráči", "Obtížnost", "Jazyk"])
+        for index, label in enumerate(["Hudba", "Zvuky", "Jazyk"])
     ]
-    button_y = top_y + 125 if difficulty_open or language_open else top_y + 75
+    button_y = top_y + 125 if language_open else top_y + 75
     play_rectangle = pygame.Rect(center + 5, button_y, 110, 60)
     exit_rectangle = pygame.Rect(center - 115, button_y, 110, 60)
-    difficulty_rectangles = [
-        pygame.Rect(center - 225 + index * 150, top_y + 50, 110, 40)
-        for index in range(4)
-    ]
+    language_width = 140
+    language_gap = 10
+    language_total_width = language_width * 2 + language_gap
+    first_language_x = (window.get_width() - language_total_width) // 2
     language_rectangles = [
-        pygame.Rect(center - 75 + index * 150, top_y + 50, 140, 40)
+        pygame.Rect(first_language_x + index * (language_width + language_gap), top_y + 50, language_width, 40)
         for index in range(2)
     ]
-    return top_buttons, play_rectangle, exit_rectangle, difficulty_rectangles, language_rectangles, top_y
+    return top_buttons, play_rectangle, exit_rectangle, language_rectangles
 
 
 def draw_switch(surface, rectangle, enabled):
@@ -321,15 +301,15 @@ def draw_switch(surface, rectangle, enabled):
 
 
 def draw_menu(surface):
-    top_buttons, play_rectangle, exit_rectangle, difficulty_rectangles, language_rectangles, top_y = menu_layout()
+    top_buttons, play_rectangle, exit_rectangle, language_rectangles = menu_layout()
     title = title_font.render("Snatch the Flower", True, (0, 0, 0))
     surface.blit(title, title.get_rect(center=(window.get_width() // 2, 60)))
     for index, line in enumerate(menu_message_lines()):
         rendered_line = message_font.render(line, True, (0, 0, 0))
         surface.blit(rendered_line, rendered_line.get_rect(center=(window.get_width() // 2, 115 + index * 22)))
     for index, (rectangle, label) in enumerate(top_buttons):
-        label = [text("music"), text("sounds"), text("players"), text("difficulty"), text("language")][index]
-        fill = (255, 255, 0) if (index == 2 and difficulty_open) or (index == 4 and language_open) else (255, 255, 255)
+        label = [text("music"), text("sounds"), text("language")][index]
+        fill = (255, 255, 0) if index == 2 and language_open else (255, 255, 255)
         draw_button(surface, rectangle, "" if index < 2 else label, button_font, fill)
         if index == 0:
             draw_switch(surface, rectangle, music_enabled)
@@ -339,11 +319,6 @@ def draw_menu(surface):
             draw_switch(surface, rectangle, sound_enabled)
             label_surface = button_font.render(text("sounds"), True, (0, 0, 0))
             surface.blit(label_surface, (rectangle.left + 50, rectangle.centery - label_surface.get_height() // 2))
-    if difficulty_open:
-        for index, rectangle in enumerate(difficulty_rectangles):
-            label = list(player_key_sets)[index]
-            fill = (220, 50, 50) if label == selected_players else (255, 255, 255)
-            draw_button(surface, rectangle, label, button_font, fill)
     if language_open:
         for index, rectangle in enumerate(language_rectangles):
             language = ["Čeština", "Angličtina"][index]
@@ -354,7 +329,7 @@ def draw_menu(surface):
 
 
 def handle_menu_click(position):
-    top_buttons, play_rectangle, exit_rectangle, difficulty_rectangles, language_rectangles, top_y = menu_layout()
+    top_buttons, play_rectangle, exit_rectangle, language_rectangles = menu_layout()
     if exit_rectangle.collidepoint(position):
         play_click_sound()
         exit_game()
@@ -364,20 +339,12 @@ def handle_menu_click(position):
     elif top_buttons[0][0].collidepoint(position):
         play_click_sound()
         toggle_music()
-    elif top_buttons[4][0].collidepoint(position):
+    elif top_buttons[2][0].collidepoint(position):
         play_click_sound()
         toggle_language()
     elif top_buttons[1][0].collidepoint(position):
         play_click_sound()
         toggle_sound()
-    elif top_buttons[2][0].collidepoint(position):
-        play_click_sound()
-        toggle_difficulty()
-    elif difficulty_open:
-        for index, rectangle in enumerate(difficulty_rectangles):
-            if rectangle.collidepoint(position):
-                play_click_sound()
-                select_difficulty(players=list(player_key_sets)[index])
     elif language_open:
         for index, rectangle in enumerate(language_rectangles):
             if rectangle.collidepoint(position):
@@ -397,8 +364,8 @@ while running:
                 play_click_sound()
             if event.key == pygame.K_ESCAPE:
                 end()
-            elif game_started and game_over_message is None and event.key in player_key_sets[selected_players]:
-                catch_player(player_key_sets[selected_players].index(event.key) + 1)
+            elif game_started and game_over_message is None and event.key in player_keys:
+                catch_player(player_keys.index(event.key) + 1)
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and not game_started and game_over_message is None:
             handle_menu_click(event.pos)
     if game_over_message is not None:
