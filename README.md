@@ -6,7 +6,7 @@
 
 When you start the game, this main menu with game settings will appear. You can turn on soothing music to create a relaxing atmosphere, or change the language to English or Czech.:
 
-<img width="437,5" height="327" alt="settings" src="https://github.com/user-attachments/assets/eee03089-caf7-412f-9821-8e2df0391112" />
+<img width="437,5" height="327" alt="home" src="https://github.com/user-attachments/assets/449da021-b6cc-47e8-8acb-3adf2c7d10f6" />
 
 Press the `Play` button to start the game. Press the `Escape` button to exit.:
 
@@ -14,7 +14,7 @@ Press the `Play` button to start the game. Press the `Escape` button to exit.:
 
 When the game ends, this message announcing the winner will appear.:
 
-<img width="437,5" height="327" alt="win" src="https://github.com/user-attachments/assets/87d3cd76-8e57-464c-aab1-38be2f9c26d1" />
+<img width="437,5" height="327" alt="winner" src="https://github.com/user-attachments/assets/377feb25-d331-4afe-8499-a4ea285a932c" />
 
 ***
 ### Top 5 interesting things in the Source Code:
