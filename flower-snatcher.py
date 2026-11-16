@@ -78,7 +78,7 @@ translations = {
         "play": "Play", "exit": "Exit", "welcome": "Welcome!", "two_players": "This game is for 2 players.",
         "player_keys": "Player 1 uses the A key and Player 2 uses the L key.", "point": "The first player to catch the flower gets a point.",
         "escape": "Press Escape to end the game.", "good_luck": "Good luck and have fun!",
-        "winner": "Player {player} wins with {score} points!", "no_winner": "Game ended with no winner."
+        "winner": "Player {player} won with {score} points!", "no_winner": "Game ended with no winner."
     }
 }
 
